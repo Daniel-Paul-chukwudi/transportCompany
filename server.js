@@ -1,5 +1,6 @@
 require('dotenv').config()
 const express = require('express')
+const cors = require('cors')
 const mongoose  =require('mongoose')
 const swaggerJSDoc = require('swagger-jsdoc')
 const swaggerUi  = require('swagger-ui-express')
@@ -11,6 +12,8 @@ const adminRouter = require('./routes/adminRoute')
 const app = express()
 
 app.use(express.json())
+app.use(cors())
+
 
 const swaggerDefinition = {
   openapi: '3.0.0',
