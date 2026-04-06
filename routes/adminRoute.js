@@ -1,4 +1,4 @@
-const {createAdmin,adminLogin} = require('../controller/adminController')
+const {createAdmin,adminLogin,adminDashboard} = require('../controller/adminController')
 const router = require('express').Router()
 
 
@@ -174,5 +174,55 @@ router.post('/createAdmin',createAdmin)
  *                   example: Internal server error
  */
 router.post('/login',adminLogin)
+
+/**
+ * @swagger
+ * /dashboard:
+ *   get:
+ *     summary: Get admin dashboard metrics
+ *     description: Retrieves summary statistics for orders including total shipments, delivered, in transit, and processing.
+ *     tags:
+ *       - Admin
+ *     responses:
+ *       200:
+ *         description: Dashboard metrics retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: All the Dashboard metrics
+ *                 data:
+ *                   type: object
+ *                   properties:
+ *                     totalShipments:
+ *                       type: integer
+ *                       example: 20
+ *                     delivered:
+ *                       type: integer
+ *                       example: 10
+ *                     inTransit:
+ *                       type: integer
+ *                       example: 5
+ *                     processing:
+ *                       type: integer
+ *                       example: 5
+ *       500:
+ *         description: Error fetching dashboard details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: error fetching Dashboard details
+ *                 error:
+ *                   type: string
+ *                   example: Internal server error
+ */
+router.get('/dashboard',adminDashboard)
 
 module.exports = router
