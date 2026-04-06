@@ -1,15 +1,19 @@
 const adminModel = require('../models/adminModel')
+const bcrypt = require('bcrypt')
 
 exports.createAdmin = async (req,res) => {
     try {
         const {fullName,companyName,email,companyEmail,password,companyNumber} = req.body
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
 
         const admin = new adminModel({
             fullName,
             companyName,
             email,
             companyEmail,
-            password,
+            password: hashedPassword,
             companyNumber
         })
 
@@ -33,15 +37,12 @@ exports.adminLogin = async (req,res) => {
         const {companyEmail,password} = req.body
 
         const admin = await adminModel.find({companyEmail})
-        // console.log(admin);
         
-
-        if (admin[0].password !== password){
-            return res.status(403).json({
-                message: "Invalid login credentials"
-            })
+        const isMatch = await bcrypt.compare(password, admin[0].password);
+        
+        if (!isMatch) {
+        return res.status(400).json({ message: "Invalid login credentials" });
         }
-       
 
         res.status(201).json({
             message: "admin login successful",
