@@ -33,8 +33,10 @@ exports.adminLogin = async (req,res) => {
         const {companyEmail,password} = req.body
 
         const admin = await adminModel.find({companyEmail})
+        // console.log(admin);
+        
 
-        if (admin.password !== password){
+        if (admin[0].password !== password){
             return res.status(403).json({
                 message: "Invalid login credentials"
             })
@@ -42,13 +44,13 @@ exports.adminLogin = async (req,res) => {
        
 
         res.status(201).json({
-            message: "admin created successfully",
+            message: "admin login successful",
             data: admin
         })
 
     } catch (error) {
         res.status(500).json({
-            message: "error creating admin",
+            message: "error admin login",
             error:error.message
         })
     }

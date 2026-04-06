@@ -4,11 +4,13 @@ const mongoose  =require('mongoose')
 PORT = process.env.PORT
 DB = process.env.DB
 const orderRouter = require('./routes/orderRoute')
+const adminRouter = require('./routes/adminRoute')
 
 const app = express()
 
 app.use(express.json())
 app.use(orderRouter)
+app.use(adminRouter)
 
 const Startserver = async ()=>{ 
   mongoose.connect(DB).then(() => {
