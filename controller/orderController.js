@@ -37,7 +37,7 @@ exports.createOrder = async (req,res) =>{
 
 exports.findByTrackingId = async (req,res) =>{
     try {
-        const {trackingId} = req.body
+        const {trackingId} = req.params
         const order = await orderModel.find({trackingId:trackingId})
 
         res.status(200).json({
@@ -115,7 +115,6 @@ exports.findOrder = async (req,res) =>{
 
 exports.getAll = async (req,res) =>{
     try {
-        const id = req.params.id
         const orders = await orderModel.find()
 
         res.status(200).json({
