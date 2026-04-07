@@ -6,7 +6,7 @@ const otpGen = require('otp-generator')
 
 exports.createOrder = async (req,res) =>{
     try {
-        const {customerName,weight,origin,destination,carrier,estmiatedDate,status} = req.body
+        const {customerName,weight,origin,destination,carrier,estimatedDate,status} = req.body
 
         let code = 0
         let trackingId = ''
@@ -44,7 +44,7 @@ exports.createOrder = async (req,res) =>{
             destination,
             carrier:carrier.toLowerCase(),
             trackingId,
-            estmiatedDate,
+            estimatedDate,
             status:status?status.toLowerCase():"processing"
         })
 
@@ -96,7 +96,7 @@ exports.updateOrder = async (req,res) =>{
             targetOrder.origin=origin?origin:targetOrder.origin,
             targetOrder.destination=destination?destination:targetOrder.destination,
             targetOrder.carrier=carrier?carrier.toLowerCase():targetOrder.carrier,
-            targetOrder.status=status?statustoLowerCase():targetOrder.status,
+            targetOrder.status=status?status.toLowerCase():targetOrder.status,
             targetOrder.estimatedDate=estimatedDate?estimatedDate:targetOrder.estimatedDate,
             
         await targetOrder.save()
