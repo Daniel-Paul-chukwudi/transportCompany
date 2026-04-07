@@ -3,20 +3,49 @@ const otpGen = require('otp-generator')
 
 
 
+
 exports.createOrder = async (req,res) =>{
     try {
-        const {customerName,weight,origin,destination,carrier} = req.body
+        const {customerName,weight,origin,destination,carrier,estmiatedDate,status} = req.body
 
-        const code = await otpGen.generate(9, { upperCaseAlphabets: false, lowerCaseAlphabets: false, digits: true, specialChars: false })
-        const trackingId = `TRK${code}`
+        let code = 0
+        let trackingId = ''
+
+        const randomNumgenerator = () =>{
+            code = otpGen.generate(9, { upperCaseAlphabets: false, lowerCaseAlphabets: false, digits: true, specialChars: false })
+            return code
+        }
+        trackingId = `TRK${randomNumgenerator()}`
+        const allOrders = await orderModel.find()
+        let tId= []
+
+        allOrders.map((item)=>{
+            tId.push(item.trackingId)
+        })
+
+        do{
+            trackingId = `TRK${randomNumgenerator()}`
+        }while (tId.includes(trackingId))
+
+
+        // for (const order of allOrders){
+        //     if(order.trackingId === trackingId){
+        //         trackingId = `TRK${randomNumgenerator()}`
+        //     }
+        // }
+        console.log(carrier.toLowerCase(),"yes");
+        
+        
 
         const order = new orderModel({
             customerName,
             weight,
             origin,
             destination,
-            carrier,
-            trackingId
+            carrier:carrier.toLowerCase(),
+            trackingId,
+            estmiatedDate,
+            status:status?status.toLowerCase():"processing"
         })
 
 
@@ -55,7 +84,7 @@ exports.findByTrackingId = async (req,res) =>{
 
 exports.updateOrder = async (req,res) =>{
     try {
-        const {customerName,weight,origin,destination,carrier,status} = req.body
+        const {customerName,weight,origin,destination,carrier,status,estimatedDate} = req.body
 
         const orderId = req.params.id
 
@@ -66,8 +95,9 @@ exports.updateOrder = async (req,res) =>{
             targetOrder.weight=weight?weight :targetOrder.weight,
             targetOrder.origin=origin?origin:targetOrder.origin,
             targetOrder.destination=destination?destination:targetOrder.destination,
-            targetOrder.carrier=carrier?carrier:targetOrder.carrier,
-            targetOrder.status=status?status:targetOrder.status,
+            targetOrder.carrier=carrier?carrier.toLowerCase():targetOrder.carrier,
+            targetOrder.status=status?statustoLowerCase():targetOrder.status,
+            targetOrder.estimatedDate=estimatedDate?estimatedDate:targetOrder.estimatedDate,
             
         await targetOrder.save()
         // const updatedOrder = {

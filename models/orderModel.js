@@ -23,6 +23,9 @@ const orderSchema =new mongoose.Schema({
         type: String,
         required: true
       },
+      estimatedDate:{
+        type: String,
+      },
       carrier:{
         type: String,
         enum: ['dhl','fedex','shipengine','ups','usps'],
